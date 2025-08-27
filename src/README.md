@@ -1,37 +1,36 @@
 
-## Movix - Documentação da API
+# Movix
 
-Antes de prosseguir, na página de login do usuário primeiro devemos fazer uma requisição:
-```http
-  GET /sanctum/csrf-cookie
-```
-Isso retorna um cookie **XSRF-TOKEN** para deixar a requisição mais segura!
+Essa Doc está organizada por seções
 
+## Auth
 ### Login
 
 ```http
   POST /api/login
 ```
 
-| Parâmetro   | Tipo       | Descrição                           |
-| :---------- | :--------- | :---------------------------------- |
-| `email` | `string` | **Obrigatório**. |
-| `password` | `string` | **Obrigatório**. Mínimo 8 caracteres |
+| Parâmetro  | Tipo       | Descrição                            |
+|:-----------|:-----------|:-------------------------------------|
+| `email`    | `string`   | **Obrigatório**.                     |
+| `password` | `string`   | **Obrigatório**. Mínimo 8 caracteres |
 
 Retorna:
 
 ```json
 {
-  "token": "82|atWURf1kuWEj2xJsjpwbvMmNZKTxwYf0KpLC6X0tc73e19f4",
-  "user": {
-    "id": 1,
-    "name": "Username",
-    "email": "example@gmail.com",
-    "email_verified_at": null,
-    "role": "delivery",
-    "created_at": "2025-08-09T01:58:45.000000Z",
-    "updated_at": "2025-08-09T01:58:45.000000Z"
-  }
+    "token": "1|movix_secret_token",
+    "user": {
+        "id": 1,
+        "name": "Username",
+        "document": "12345678900",
+        "email": "example@gmail.com",
+        "role": "delivery",
+        "active": true,
+        "email_verified_at": "2025-08-27T00:02:45.000000Z",
+        "created_at": "2025-08-27T00:00:49.000000Z",
+        "updated_at": "2025-08-27T00:02:45.000000Z"
+    }
 }
 ```
 
@@ -41,47 +40,71 @@ Retorna:
   POST /api/register
 ```
 
-| Parâmetro   | Tipo       | Descrição                                   |
-| :---------- | :--------- | :------------------------------------------ |
-| `name`      | `string` | **Obrigatório**. Máximo 60 caracteres |
-| `email`      | `string` | **Obrigatório**. |
-| `password`      | `string` | **Obrigatório**. Mínimo 8 caracteres |
+| Parâmetro  | Tipo       | Descrição                             |
+|:-----------|:-----------|:--------------------------------------|
+| `name`     | `string`   | **Obrigatório**. Máximo 60 caracteres |
+| `email`    | `string`   | **Obrigatório**.                      |
+| `document` | `string`   | **Obrigatório**.                      |
+| `password` | `string`   | **Obrigatório**. Mínimo 8 caracteres  |
 
 Retorna:
 
 ```json
 {
-  "token": "82|atWURf1kuWEj2xJsjpwbvMmNZKTxwYf0KpLC6X0tc73e19f4",
-  "user": {
-    "id": 1,
-    "name": "Username",
-    "email": "example@gmail.com",
-    "created_at": "2025-08-09T01:58:45.000000Z",
-    "updated_at": "2025-08-09T01:58:45.000000Z"
-  }
+    "created": true
+}
+```
+
+### Confirm Account
+
+```http
+  POST /api/confirm-account
+```
+
+| Parâmetro  | Tipo       | Descrição          |
+|:-----------|:-----------|:-------------------|
+| `code`     | `string`   | **Obrigatório**.   |
+| `email`    | `string`   | **Obrigatório**.   |
+
+```json
+{
+    "success": true,
+    "token": "1|movix_secret_token"
+}
+```
+
+### Resend Code
+
+```http
+  POST /api/resend-code
+```
+
+| Parâmetro  | Tipo       | Descrição          |
+|:-----------|:-----------|:-------------------|
+| `email`    | `string`   | **Obrigatório**.   |
+
+```json
+{
+    "success": true
 }
 ```
 
 ### Logout
 
-Aqui o parâmetro seria um **Bearer token** com o **token** do usuário no header da requisição!
-
 ```http
   POST /api/logout
 ```
 
-| Parâmetro   | Tipo       | Descrição                                   |
-| :---------- | :--------- | :------------------------------------------ |
-| `token`      | `string` | **Obrigatório**. Bearer token |
+| Parâmetro   | Tipo       | Descrição                       |
+|:------------|:-----------|:--------------------------------|
+| `token`     | `string`   | **Obrigatório**. Bearer token   |
 
 ### User (autologin)
-
-Aqui o parâmetro seria um **Bearer token** com o **token** do usuário no header da requisição!
 
 ```http
   GET /api/user
 ```
 
-| Parâmetro   | Tipo       | Descrição                                   |
-| :---------- | :--------- | :------------------------------------------ |
-| `token`      | `string` | **Obrigatório**. Bearer token |
+| Parâmetro   | Tipo       | Descrição                       |
+|:------------|:-----------|:--------------------------------|
+| `token`     | `string`   | **Obrigatório**. Bearer token   |
