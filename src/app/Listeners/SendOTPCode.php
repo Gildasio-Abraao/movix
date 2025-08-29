@@ -12,9 +12,10 @@ class SendOTPCode
     public function handle(VerificationCodeRequested $event): void
     {
         $user = $event->user;
-        $otp = rand(100000, 999999);
+        $otp = random_int(100000, 999999);
+        $emailHash = hash('sha256', $user->email);
 
-        Redis::set("otp:{$user->email}", $otp, 'EX', 300);
+        Redis::set("otp:{$emailHash}", $otp, 'EX', 300);
         Mail::to($user->email)->send(New OtpMail($otp, $user->name));
     }
 }

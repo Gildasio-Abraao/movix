@@ -74,14 +74,15 @@ class AuthController extends Controller
             'email' => 'required|string',
             'code' => 'required|string|min:6|max:6'
         ]);
+        $email_hash = hash('sha256', $fields['email']);
 
-        $redis_code = Redis::get("otp:{$request->email}");
+        $redis_code = Redis::get("otp:{$email_hash}");
 
         if($redis_code != $fields['code']) {
             return response()->json([ 'message' => 'Invalid token' ], 401);
         }
 
-        Redis::del("otp:{$request->email}");
+        Redis::del("otp:{$email_hash}");
         User::where('email', $request->email)
             ->update([
                 'active' => true,
