@@ -75,7 +75,6 @@ class AuthController extends Controller
             'code' => 'required|string|min:6|max:6'
         ]);
         $email_hash = hash('sha256', $fields['email']);
-
         $redis_code = Redis::get("otp:{$email_hash}");
 
         if($redis_code != $fields['code']) {
